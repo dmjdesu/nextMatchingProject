@@ -7,6 +7,7 @@ import { gigsApi } from '@/api/client';
 import type { Gig } from '@/api'; 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../contexts/providers/AuthProvider';
+import { useEffect } from 'react';
 
 export default function GigsListPage() {
   const [search, setSearch] = useState('');
@@ -14,10 +15,11 @@ export default function GigsListPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
- if (!isAuthenticated) {
-   router.push('/login');
-   return null;
- }
+ useEffect(() => {
+        if (!isAuthenticated) {
+        router.push('/login');
+        }
+    }, [isAuthenticated, router]);
 
   const { data: gigs, error, isLoading } = useSWR(
     ['gigs', search, ordering],

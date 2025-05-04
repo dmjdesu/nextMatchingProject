@@ -6,15 +6,17 @@ import { applicationsApi } from '@/api/client';
 import type { Application } from '@/api';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../contexts/providers/AuthProvider';
+import { useEffect } from 'react';
 
 export default function ApplicationsPage() {
     const { isAuthenticated } = useAuth();
     const router = useRouter();
 
-    if (!isAuthenticated) {
+    useEffect(() => {
+        if (!isAuthenticated) {
         router.push('/login');
-        return null;
-    }
+        }
+    }, [isAuthenticated, router]);
   const currentUserId = Number(localStorage.getItem('user_id') ?? 0);
 
   const { data: apps, error, isLoading } = useSWR(

@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { gigsApi, applicationsApi } from '@/api/client';
 import type { Gig } from '@/api';
 import { useRouter } from 'next/navigation';
@@ -14,10 +14,11 @@ export default function GigDetailPage() {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
-  if (!isAuthenticated) {
-   router.push('/login');
-   return null;
- }
+  useEffect(() => {
+        if (!isAuthenticated) {
+        router.push('/login');
+        }
+    }, [isAuthenticated, router]);
 
   const { data: gig, error, isLoading } = useSWR<Gig>(
     gigId ? ['gig', gigId] : null,
